@@ -1,0 +1,10 @@
+Testsuite: com.hida.report.DynamicTableReportSpec
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 3.469 sec
+------------- Standard Output ---------------
+--Output from test something--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from test something--
+------------- ---------------- ---------------
+
+Testcase: test something took 3.468 sec
