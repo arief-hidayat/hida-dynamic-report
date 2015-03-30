@@ -42,6 +42,8 @@ grails.project.dependency.resolution = {
                     'jackson-databind', 'jackson-annotations','xml-apis'
 
         }
+        compile 'net.sourceforge.barbecue:barbecue:1.5-beta1'
+        compile 'net.sf.barcode4j:barcode4j:2.0'
         compile 'net.sourceforge.dynamicreports:dynamicreports-core:4.0.0'
         compile 'net.sourceforge.dynamicreports:dynamicreports-adhoc:4.0.0'
         compile 'net.sourceforge.dynamicreports:dynamicreports-googlecharts:4.0.0'
