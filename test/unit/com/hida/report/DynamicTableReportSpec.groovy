@@ -3,7 +3,11 @@ package com.hida.report
 import com.hida.report.dynamic.DynamicTableDesigner
 import com.hida.report.dynamic.DynamicTableReport
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
+import net.sf.dynamicreports.report.builder.component.TextFieldBuilder
+import net.sf.dynamicreports.report.constant.HorizontalAlignment
 import spock.lang.Specification
+
+import static net.sf.dynamicreports.report.builder.DynamicReports.cmp
 
 /**
  * Created by hida on 26/3/2015.
@@ -62,7 +66,12 @@ class DynamicTableReportSpec extends Specification {
                 new StateSalesData("Florida", "Phone", toDate(2010, 1, 18), 1, new BigDecimal(250)),
                 new StateSalesData("Florida", "Phone", toDate(2010, 1, 26), 1, new BigDecimal(201))
         ])
-        JasperReportBuilder report = DynamicTableDesigner.build("Test", DynamicReportData.getDynamicReport(tableDataSource.dynamicColumns), tableDataSource.dataSource);
+
+        TextFieldBuilder<String> halo = cmp.text("Halo")
+                .setStyle(Templates.bold12CenteredStyle)
+                .setHorizontalAlignment(HorizontalAlignment.LEFT);
+        JasperReportBuilder report = DynamicTableDesigner.build("Test", DynamicReportData.getDynamicReport(tableDataSource.dynamicColumns), tableDataSource.dataSource,
+                cmp.horizontalList(halo));
         then:
         report != null
         report.show()

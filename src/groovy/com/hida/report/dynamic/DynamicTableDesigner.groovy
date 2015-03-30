@@ -3,6 +3,8 @@ package com.hida.report.dynamic
 import com.hida.report.Templates
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder
+import net.sf.dynamicreports.report.builder.component.HorizontalListBuilder
 import net.sf.dynamicreports.report.builder.component.PageXofYBuilder
 import net.sf.dynamicreports.report.builder.component.TextFieldBuilder
 import net.sf.dynamicreports.report.builder.group.ColumnGroupBuilder
@@ -17,20 +19,26 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.*
  */
 class DynamicTableDesigner {
 
-    public static JasperReportBuilder build(String titleName, DynamicTableReport dynamicReport, def dataSource) throws DRException {
-        build(titleName, null, dynamicReport, dataSource)
+    public static JasperReportBuilder build(String titleName, DynamicTableReport dynamicReport, def dataSource, HorizontalListBuilder titleComponents = null) throws DRException {
+        build(titleName, null, dynamicReport, dataSource, titleComponents)
     }
 
-    public static JasperReportBuilder build(String titleName, String barcode, DynamicTableReport dynamicReport, def dataSource) throws DRException {
-        JasperReportBuilder report = report();
+    public static JasperReportBuilder build(String titleName, String barcode, DynamicTableReport dynamicReport, def dataSource, HorizontalListBuilder titleComponents = null) throws DRException {
+        JasperReportBuilder report = buildHeader(titleName, barcode, titleComponents);
+        buildColumns(dynamicReport, report);
+        report.setDataSource(dataSource);
+        return report;
+    }
+    public static JasperReportBuilder buildHeader(String titleName, String barcode, HorizontalListBuilder titleComponents = null) throws DRException {
+        JasperReportBuilder report = report().setTemplate(Templates.reportTemplate);
+        if(!titleComponents) return report.title(Templates.createTitleComponent(titleName, barcode));
+        report.title(cmp.verticalList(Templates.createTitleComponent(titleName, barcode), titleComponents, cmp.verticalGap(5)))
 
-        report
-                .setTemplate(Templates.reportTemplate)
-                .title(Templates.createTitleComponent(titleName, barcode));
+    }
 
+    public static JasperReportBuilder buildColumns(DynamicTableReport dynamicReport, JasperReportBuilder report) throws DRException {
         List<DynamicColumn> columns = dynamicReport.getColumns();
         Map<String, TextColumnBuilder> drColumns = new HashMap<String, TextColumnBuilder>();
-
         for (DynamicColumn column : columns) {
             TextColumnBuilder drColumn = col.column(column.getTitle(), column.getName(), (DRIDataType) type.detectType(column.getType()));
             if (column.getPattern() != null) {
@@ -67,8 +75,22 @@ class DynamicTableDesigner {
                     .setStyle(Templates.boldCenteredStyle);
             report.addPageFooter(pageXofY);
         }
-        report.setDataSource(dataSource);
-
-        return report;
+        report
     }
+
+    public static List<TextColumnBuilder<?>> getTextColumnBuilders(List<DynamicColumn> columns) {
+        List<TextColumnBuilder<?>> res = new ArrayList<>()
+        for (DynamicColumn column : columns) {
+            TextColumnBuilder drColumn = col.column(column.getTitle(), column.getName(), (DRIDataType) type.detectType(column.getType()));
+            if (column.getPattern() != null) {
+                drColumn.setPattern(column.getPattern());
+            }
+            if (column.getHorizontalAlignment() != null) {
+                drColumn.setHorizontalAlignment(column.getHorizontalAlignment());
+            }
+            res.add(drColumn)
+        }
+        res
+    }
+
 }
