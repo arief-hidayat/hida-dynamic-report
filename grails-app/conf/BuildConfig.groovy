@@ -37,7 +37,11 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // runtime 'mysql:mysql-connector-java:5.1.27'
-        compile 'net.sf.jasperreports:jasperreports:6.0.3'
+        compile ('net.sf.jasperreports:jasperreports:6.0.3') {
+            excludes 'lucene-core', 'lucene-analyzers-common','lucene-queryparser','olap4j','castor-xml','jackson-core',
+                    'jackson-databind', 'jackson-annotations','xml-apis'
+
+        }
         compile 'net.sourceforge.dynamicreports:dynamicreports-core:4.0.0'
         compile 'net.sourceforge.dynamicreports:dynamicreports-adhoc:4.0.0'
         compile 'net.sourceforge.dynamicreports:dynamicreports-googlecharts:4.0.0'
