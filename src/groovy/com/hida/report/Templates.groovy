@@ -100,7 +100,7 @@ class Templates {
 
         ImageBuilder image = null
         if(COMPANY_LOGO_FILE_PATH) image = cmp.image(new FileInputStream(new File(COMPANY_LOGO_FILE_PATH)))
-        else image = cmp.image(Templates.class.classLoader.getResourceAsStream("images/company_logo.png"))
+        else image = cmp.image(Templates.class.classLoader.getResource("images/company_logo.png"))
 
         dynamicReportsComponent =
                 cmp.verticalList(
@@ -112,7 +112,6 @@ class Templates {
                 stl.style(boldCenteredStyle)
                         .setTopBorder(stl.pen1Point()));
     }
-
 
 //    public static ComponentBuilder<?, ?> createTitleComponent(String label) {
 //        return cmp.horizontalList()

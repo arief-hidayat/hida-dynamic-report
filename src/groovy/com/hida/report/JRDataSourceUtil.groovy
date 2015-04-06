@@ -48,6 +48,7 @@ class JRDataSourceUtil {
             GrailsDomainClassProperty prop = d.getPersistentProperty(col)
             String title = messageSource?.getMessage("column.${domainClass.simpleName}.${col}.label", null, locale) ?:
                     (messageSource?.getMessage("default.${col}.label", null, prop.naturalName, locale))
+            if(!title) title = prop.naturalName
             DynamicColumn column = new DynamicColumn(title, col, getDrColumnType(prop.type))
             list.add column
         }
